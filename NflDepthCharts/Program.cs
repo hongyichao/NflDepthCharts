@@ -1,12 +1,7 @@
 ﻿
 
 using NflDepthChartsService;
-using NflDepthChartsService.DataModel;
-using System.Numerics;
 
-using System;
-using System.Threading.Tasks;
-using System.Collections.Generic;
 
 class Program
 {
@@ -17,11 +12,13 @@ class Program
 
         var footballDepthChartStrategy = new FootballDepthChartStrategy();
 
+        var footballDepthChart = new DepthChart(footballDepthChartStrategy);
+
         // Create 2 teams
-        var teams = new List<Team>() 
+        var teams = new List<ITeam>() 
         {
-            new Team("Tampa Bay Buccaneers", "Football", footballDepthChartStrategy),
-            new Team("Arizona Cardinals", "Football", footballDepthChartStrategy)
+            new Team("Tampa Bay Buccaneers", "Football", footballDepthChart),
+            new Team("Arizona Cardinals", "Football", footballDepthChart)
         };
 
         //add teams into sport
@@ -48,9 +45,9 @@ class Program
 
 
         // Retrieve backups
-        var qbDepthChart = team.GetOrCreateDepthChart("QB");
-        var player = await qbDepthChart.GetPlayerAsync("Tom Brady");
-        var backups = await qbDepthChart.GetBackupsAsync(player);
+        var player = await team.GetPlayerFromDepthChart("QB", "Tom Brady");        
+        var backups = await team.GetBackupsAsync(player);
+
         Console.WriteLine($"Backups for {player.Name}:\n {string.Join("\n ", backups)}");
 
 
@@ -58,21 +55,18 @@ class Program
 
         // Print full depth chart for Buccaneers
         Console.WriteLine("\ngetFullDepthChart() /* Output");
-        foreach (var depthChart in team.DepthCharts) 
+        var depthChart = await team.GetDepthChart().GetFullDepthChartAsync();
+        foreach (var entry in depthChart)
         {
-            var fullDepthChart = await depthChart.Value.GetFullDepthChartAsync();
-            Console.WriteLine($"{depthChart.Key} -- {string.Join(", ", fullDepthChart)}");
-        }
-
-        // Print all teams in Football
-        Console.WriteLine("\nAll teams in Football:");
-        foreach (var t in football.Teams)
-        {
-            Console.WriteLine($"- {t.Name}");
+            Console.WriteLine($"Position: {entry.Key}");
+            foreach (var p in entry.Value)
+            {
+                Console.WriteLine($"   {p}");
+            }
         }
     }
 
-    private static async Task BatchAddPlayersToTeamDepthChart(Team team, string position, List<Player> players) 
+    private static async Task BatchAddPlayersToTeamDepthChart(ITeam team, string position, List<Player> players) 
     {
         foreach (var player in players.Where(p => p.Position.ToLower() == position.ToLower()))
         {

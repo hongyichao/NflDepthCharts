@@ -1,39 +1,49 @@
 ﻿
-
-using NflDepthChartsService.DataModel;
-
 namespace NflDepthChartsService
 {
-    public class DepthChart: IdepthChart
+    public class DepthChart: IDepthChart
     {
-        private readonly List<Player> _players;
+        private readonly Dictionary<string, List<Player>> _chartGroups;
         private readonly IDepthChartStrategy _strategy;
 
         public DepthChart(IDepthChartStrategy strategy)
         {
-            _players = new List<Player>();
+            _chartGroups = new Dictionary<string, List<Player>>();
             _strategy = strategy;
         }
 
         public async Task AddPlayerAsync(Player player, int? positionDepth = null)
         {
-            await _strategy.AddPlayerAsync(_players, player, positionDepth);
+            
+
+            if (!_chartGroups.ContainsKey(player.Position))
+            {
+                _chartGroups[player.Position] = new List<Player>();
+            }
+
+            await _strategy.AddPlayerAsync(_chartGroups[player.Position], player, positionDepth);
         }
 
-        public async Task<Player> GetPlayerAsync(string name) 
+        public async Task<Player> GetPlayerAsync(string position, string name) 
         {
             return await Task.Run(()=> 
-            { 
-                return _players.FirstOrDefault(p => p.Name.ToLower() == name.ToLower()); 
+            {
+                if (!_chartGroups.ContainsKey(position))
+                    return null;
+                                
+                return _chartGroups[position].FirstOrDefault(p=>p.Name.ToLower() == name.ToLower()); 
             });
         }
 
 
-        public async Task<Player> RemovePlayerAsync(Player player)
+        public async Task<Player> RemovePlayerAsync(string position, Player player)
         {
             return await Task.Run(() =>
             {
-                if (_players.Remove(player))
+                if (!_chartGroups.ContainsKey(position))
+                    return null;
+
+                if (_chartGroups[position].Remove(player))
                 {
                     return player;
                 }
@@ -41,9 +51,9 @@ namespace NflDepthChartsService
             });
         }
 
-        public async Task<List<Player>> GetBackupsAsync(string playerName)
+        public async Task<List<Player>> GetBackupsAsync(string position, string playerName)
         {
-            var player = _players.FirstOrDefault(p => p.Name.ToLower() == playerName.ToLower());
+            var player = await GetPlayerAsync(position, playerName);
 
             return await GetBackupsAsync(player);
         }
@@ -52,18 +62,24 @@ namespace NflDepthChartsService
         {
             return await Task.Run(() =>
             {
-                var index = _players.IndexOf(player);
-                if (index >= 0 && index < _players.Count - 1)
+                if (_chartGroups.ContainsKey(player.Position))
                 {
-                    return _players.GetRange(index + 1, _players.Count - index - 1);
+                    var playerList = _chartGroups[player.Position];
+
+                    var index = playerList.IndexOf(player);
+                    if (index >= 0 && index < playerList.Count - 1)
+                    {
+                        return playerList.GetRange(index + 1, playerList.Count - index - 1);
+                    }
                 }
+                
                 return new List<Player>();
             });
         }
 
-        public async Task<List<Player>> GetFullDepthChartAsync()
+        public async Task<Dictionary<string, List<Player>>> GetFullDepthChartAsync()
         {
-            return await Task.Run(() => new List<Player>(_players));
+            return await Task.Run(() => _chartGroups);
         }
     }
 

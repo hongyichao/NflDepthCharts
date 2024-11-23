@@ -1,17 +1,13 @@
-﻿using NflDepthChartsService.DataModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace NflDepthChartsService
 {
-    public interface IdepthChart
+    public interface IDepthChart
     {
         Task AddPlayerAsync(Player player, int? positionDepth = null);
-        Task<Player> RemovePlayerAsync(Player player);
+        Task<Player> GetPlayerAsync(string position, string name);
+        Task<Player> RemovePlayerAsync(string position, Player player);
+        Task<List<Player>> GetBackupsAsync(string position, string playerName);
         Task<List<Player>> GetBackupsAsync(Player player);
-        Task<List<Player>> GetFullDepthChartAsync();
+        Task<Dictionary<string, List<Player>>> GetFullDepthChartAsync();
     }
 }

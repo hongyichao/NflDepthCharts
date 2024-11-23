@@ -1,5 +1,4 @@
 using NflDepthChartsService;
-using NflDepthChartsService.DataModel;
 
 namespace NflDepthChartsServiceTest
 {
@@ -11,6 +10,41 @@ namespace NflDepthChartsServiceTest
         {
             var footballStrategy = new FootballDepthChartStrategy();
             _depthChart = new DepthChart(footballStrategy);
+        }
+
+        [Fact]
+        public async Task AddPlayer_ShouldAddToDepthChart_WhenPositionDepthIsNull()
+        {
+            // Arrange
+            var strategy = new FootballDepthChartStrategy();
+            var depthChart = new DepthChart(strategy);
+            var player = new Player(1, "Test Player", "QB");
+
+            // Act
+            await depthChart.AddPlayerAsync(player);
+
+            // Assert
+            var fullDepthChart = await depthChart.GetFullDepthChartAsync();
+            Assert.Contains(player, fullDepthChart);
+        }
+
+        [Fact]
+        public async Task AddPlayer_ShouldAddAtSpecificDepth_WhenPositionDepthIsProvided()
+        {
+            // Arrange
+            var strategy = new FootballDepthChartStrategy();
+            var depthChart = new DepthChart(strategy);
+            var player1 = new Player(1, "Player 1", "QB");
+            var player2 = new Player(2, "Player 2", "QB");
+            await depthChart.AddPlayerAsync(player1);
+
+            // Act
+            await depthChart.AddPlayerAsync(player2, 0);
+
+            // Assert
+            var fullDepthChart = await depthChart.GetFullDepthChartAsync();
+            Assert.Equal(player2, fullDepthChart[0]);
+            Assert.Equal(player1, fullDepthChart[1]);
         }
 
         [Fact]
@@ -28,48 +62,56 @@ namespace NflDepthChartsServiceTest
         }
 
         [Fact]
-        public async Task RemovePlayerAsync_ShouldRemovePlayerFromDepthChart()
+        public async Task RemovePlayer_ShouldRemoveFromDepthChart()
         {
             // Arrange
-            var player = new Player(12, "Tom Brady", "QB");
-            await _depthChart.AddPlayerAsync(player, 0);
+            var strategy = new FootballDepthChartStrategy();
+            var depthChart = new DepthChart(strategy);
+            var player = new Player(1, "Test Player", "QB");
+            await depthChart.AddPlayerAsync(player);
 
             // Act
-            var removedPlayer = await _depthChart.RemovePlayerAsync(player);
+            var removedPlayer = await depthChart.RemovePlayerAsync(player);
 
             // Assert
-            var chart = await _depthChart.GetFullDepthChartAsync();
+            var fullDepthChart = await depthChart.GetFullDepthChartAsync();
+            Assert.DoesNotContain(player, fullDepthChart);
             Assert.Equal(player, removedPlayer);
-            Assert.DoesNotContain(player, chart);
         }
 
         [Fact]
-        public async Task GetBackupsAsync_ShouldReturnCorrectBackups()
+        public async Task GetBackups_ShouldReturnCorrectBackups()
         {
             // Arrange
-            var tomBrady = new Player(12, "Tom Brady", "QB");
-            var kyleTrask = new Player(2, "Kyle Trask", "QB");
+            var strategy = new FootballDepthChartStrategy();
+            var depthChart = new DepthChart(strategy);
+            var player1 = new Player(1, "Player 1", "QB");
+            var player2 = new Player(2, "Player 2", "QB");
+            var player3 = new Player(3, "Player 3", "QB");
 
-            await _depthChart.AddPlayerAsync(tomBrady, 0);
-            await _depthChart.AddPlayerAsync(kyleTrask, 1);
+            await depthChart.AddPlayerAsync(player1);
+            await depthChart.AddPlayerAsync(player2);
+            await depthChart.AddPlayerAsync(player3);
 
             // Act
-            var backups = await _depthChart.GetBackupsAsync(tomBrady);
+            var backups = await depthChart.GetBackupsAsync(player1);
 
             // Assert
-            Assert.Contains(kyleTrask, backups);
-            Assert.Single(backups); // Only one backup expected
+            Assert.Contains(player2, backups);
+            Assert.Contains(player3, backups);
         }
 
         [Fact]
-        public async Task GetBackupsAsync_ShouldReturnEmptyList_WhenNoBackupsExist()
+        public async Task GetBackups_ShouldReturnEmpty_WhenNoBackupsExist()
         {
             // Arrange
-            var tomBrady = new Player(12, "Tom Brady", "QB");
-            await _depthChart.AddPlayerAsync(tomBrady);
+            var strategy = new FootballDepthChartStrategy();
+            var depthChart = new DepthChart(strategy);
+            var player = new Player(1, "Player 1", "QB");
+            await depthChart.AddPlayerAsync(player);
 
             // Act
-            var backups = await _depthChart.GetBackupsAsync(tomBrady);
+            var backups = await depthChart.GetBackupsAsync(player);
 
             // Assert
             Assert.Empty(backups);
@@ -105,5 +147,5 @@ namespace NflDepthChartsServiceTest
         //        // Assert
         //        Assert.Null(result);
         //    }
-        }
+    }
     }
