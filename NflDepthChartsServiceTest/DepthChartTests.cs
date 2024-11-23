@@ -23,7 +23,25 @@ namespace NflDepthChartsServiceTest
         }
 
         [Fact]
-        public async Task AddPlayerAsync_AddDuplicatedPlayer_ShouldHandleDuplicatePlayers()
+        public async Task AddPlayerAsync_AddPlayerWithEmptyName_ShouldThrowException()
+        {
+            // Arrange
+            var strategy = new FootballDepthChartStrategy();
+            var depthChart = new DepthChart(strategy);
+            var player = new Player(52, " ", "QB");
+
+            // Act
+            var exception = await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+            {
+                await depthChart.AddPlayerAsync(player);
+            });
+
+            // Assert
+            Assert.Equal("The player name cannot be empty", exception.Message);
+        }
+
+        [Fact]
+        public async Task AddPlayerAsync_AddDuplicatedPlayer_ShouldThrowException()
         {
             // Arrange
             var strategy = new FootballDepthChartStrategy();

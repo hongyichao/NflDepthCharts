@@ -16,6 +16,9 @@ namespace NflDepthChartsService
 
         public async Task AddPlayerAsync(Player player, int? positionDepth = null)
         {
+            if(string.IsNullOrWhiteSpace(player.Name))
+                throw new InvalidOperationException("The player name cannot be empty");
+
             var existingPlayer = await GetPlayerAsync(player.Position, player.Name);
 
             if (existingPlayer != null)
