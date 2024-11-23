@@ -1,6 +1,9 @@
 ﻿
 
 using NflDepthChartsService;
+using System.Diagnostics;
+using System.Numerics;
+using System.Xml.Linq;
 
 
 class Program
@@ -45,18 +48,33 @@ class Program
 
 
         // Retrieve backups
-        var player = await team.GetPlayerFromDepthChart("QB", "Tom Brady");        
-        var backups = await team.GetBackupsAsync(player);
-
-        Console.WriteLine($"Backups for {player.Name}:\n {string.Join("\n ", backups)}");
-
-
+        await GetBackUps(team, "QB", "Tom Brady");
+        await GetBackUps(team, "LWR", "Jaelon Darden");
+        await GetBackUps(team, "QB", "Mike Evans");
+        await GetBackUps(team, "QB", "Blaine Gabbert");
+        await GetBackUps(team, "QB", "Kyle Trask");
 
 
         // Print full depth chart for Buccaneers
+        await PrintFullDepthChart(team);
+
+        var depthChart = team.GetDepthChart();
+
+        //delete player
+        var playerToDelete = await depthChart.GetPlayerAsync("LWR", "Mike Evans");
+        var deletedPlayer = await depthChart.RemovePlayerAsync("LWR", playerToDelete);
+        Console.WriteLine($"\n{deletedPlayer}");
+
+        // Print full depth chart for Buccaneers
+        await PrintFullDepthChart(team);
+    }
+
+    private static async Task PrintFullDepthChart(ITeam team) 
+    {
+        // Print full depth chart for Buccaneers
         Console.WriteLine("\ngetFullDepthChart() /* Output");
-        var depthChart = await team.GetDepthChart().GetFullDepthChartAsync();
-        foreach (var entry in depthChart)
+        var depthChartDictionary = await team.GetDepthChart().GetFullDepthChartAsync();
+        foreach (var entry in depthChartDictionary)
         {
             Console.WriteLine($"Position: {entry.Key}");
             foreach (var p in entry.Value)
@@ -66,6 +84,26 @@ class Program
         }
     }
 
+    private static async Task GetBackUps(ITeam team,string position, string name)
+    {
+        Console.WriteLine($"Backups for {name}:");
+
+        var player = await team.GetPlayerFromDepthChart(position, name);
+        if (player == null)
+        { 
+            Console.WriteLine($"<NO LIST>\n");
+            return;
+        }
+
+        var backups = await team.GetBackupsAsync(player);
+        if (backups == null || backups.Count ==0)
+        { 
+            Console.WriteLine($"<NO LIST>\n");
+            return;
+        }
+
+        Console.WriteLine($"{string.Join("\n", backups)}\n");
+    }
     private static async Task BatchAddPlayersToTeamDepthChart(ITeam team, string position, List<Player> players) 
     {
         foreach (var player in players.Where(p => p.Position.ToLower() == position.ToLower()))
