@@ -11,6 +11,7 @@ Assumption Made:
 3. should not be able to add duplicated player. Updating player will require removing the player first
 4. different team can have different business logic for Depth Chart
 5. player's name cannnot be empty
+6. Exception handling is not important for this exercise
 
 To Run the App:
 1. open the project by using Visual Studio 2022 or a version that support .NET 8.0
