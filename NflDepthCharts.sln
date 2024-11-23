@@ -5,6 +5,10 @@ VisualStudioVersion = 17.11.35431.28
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NflDepthCharts", "NflDepthCharts\NflDepthCharts.csproj", "{17DE93D9-E087-469C-BE63-1C128B1858BA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NflDepthChartsServiceTest", "NflDepthChartsServiceTest\NflDepthChartsServiceTest.csproj", "{BE21EA5F-BBB7-4155-BA82-4017AE5CC1EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NflDepthChartsService", "NflDepthChartsService\NflDepthChartsService.csproj", "{ABA04F90-6A88-4F86-8ABD-AD9C2C72BB02}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{17DE93D9-E087-469C-BE63-1C128B1858BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17DE93D9-E087-469C-BE63-1C128B1858BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17DE93D9-E087-469C-BE63-1C128B1858BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE21EA5F-BBB7-4155-BA82-4017AE5CC1EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE21EA5F-BBB7-4155-BA82-4017AE5CC1EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE21EA5F-BBB7-4155-BA82-4017AE5CC1EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE21EA5F-BBB7-4155-BA82-4017AE5CC1EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABA04F90-6A88-4F86-8ABD-AD9C2C72BB02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABA04F90-6A88-4F86-8ABD-AD9C2C72BB02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABA04F90-6A88-4F86-8ABD-AD9C2C72BB02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABA04F90-6A88-4F86-8ABD-AD9C2C72BB02}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
