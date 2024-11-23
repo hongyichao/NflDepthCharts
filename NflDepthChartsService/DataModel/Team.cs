@@ -22,7 +22,7 @@ namespace NflDepthChartsService.DataModel
             _depthChartStrategy = depthChartStrategy;
         }
 
-        public async Task AddPlayerToDepthChart(Player player, int? depth)
+        public async Task AddPlayerToDepthChart(Player player, int? depth=null)
         {
             await GetOrCreateDepthChart(player.Position).AddPlayerAsync(player, depth);
         }

@@ -21,7 +21,7 @@ class Program
         var teams = new List<Team>() 
         {
             new Team("Tampa Bay Buccaneers", "Football", footballDepthChartStrategy),
-            new Team("Kansas City Chiefs", "Football", footballDepthChartStrategy)
+            new Team("Arizona Cardinals", "Football", footballDepthChartStrategy)
         };
 
         //add teams into sport
@@ -55,18 +55,14 @@ class Program
 
 
 
-        
+
+        // Print full depth chart for Buccaneers
         Console.WriteLine("\ngetFullDepthChart() /* Output");
         foreach (var depthChart in team.DepthCharts) 
         {
             var fullDepthChart = await depthChart.Value.GetFullDepthChartAsync();
             Console.WriteLine($"{depthChart.Key} -- {string.Join(", ", fullDepthChart)}");
         }
-
-
-
-        // Print full depth chart for Buccaneers
-        
 
         // Print all teams in Football
         Console.WriteLine("\nAll teams in Football:");
@@ -78,10 +74,9 @@ class Program
 
     private static async Task BatchAddPlayersToTeamDepthChart(Team team, string position, List<Player> players) 
     {
-        int depthCount = 0;
         foreach (var player in players.Where(p => p.Position.ToLower() == position.ToLower()))
         {
-            await team.AddPlayerToDepthChart(player, depthCount++);
+            await team.AddPlayerToDepthChart(player);
         }
     }
 }
