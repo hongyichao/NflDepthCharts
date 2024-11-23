@@ -1,4 +1,6 @@
 ﻿
+using System.Xml.Linq;
+
 namespace NflDepthChartsService
 {
     public class DepthChart: IDepthChart
@@ -14,15 +16,23 @@ namespace NflDepthChartsService
 
         public async Task AddPlayerAsync(Player player, int? positionDepth = null)
         {
-            
+            var existingPlayer = await GetPlayerAsync(player.Position, player.Name);
 
-            if (!_chartGroups.ContainsKey(player.Position))
+            if (existingPlayer != null)
             {
-                _chartGroups[player.Position] = new List<Player>();
+                throw new InvalidOperationException("The player is an existing player");
             }
+            else 
+            {
+                if (!_chartGroups.ContainsKey(player.Position))
+                {
+                    _chartGroups[player.Position] = new List<Player>();
+                }
 
-            await _strategy.AddPlayerAsync(_chartGroups[player.Position], player, positionDepth);
+                await _strategy.AddPlayerAsync(_chartGroups[player.Position], player, positionDepth);
+            }
         }
+
 
         public async Task<Player> GetPlayerAsync(string position, string name) 
         {
@@ -62,7 +72,7 @@ namespace NflDepthChartsService
         {
             return await Task.Run(() =>
             {
-                if (_chartGroups.ContainsKey(player.Position))
+                if (player!=null && _chartGroups.ContainsKey(player.Position))
                 {
                     var playerList = _chartGroups[player.Position];
 

@@ -38,15 +38,5 @@ namespace NflDepthChartsService
         {
             return _depthChart;
         }
-
-        //public IDepthChart GetOrCreateDepthChart(string position)
-        //{
-        //    if (!DepthCharts.ContainsKey(position))
-        //    {
-        //        DepthCharts[position] = new DepthChart(_depthChartStrategy);
-        //    }
-
-        //    return DepthCharts[position];
-        //}
     }
 }
