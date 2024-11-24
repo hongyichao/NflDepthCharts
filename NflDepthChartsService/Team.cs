@@ -16,6 +16,12 @@ namespace NflDepthChartsService
 
         public async Task AddPlayerToDepthChart(Player player, int? depth = null)
         {
+            if (player == null)
+                throw new ArgumentNullException("The player cannot be null");
+
+            if (string.IsNullOrWhiteSpace(player.Name))
+                throw new InvalidOperationException("The player name cannot be empty");
+
             await _depthChart.AddPlayerAsync(player, depth);
         }
 
