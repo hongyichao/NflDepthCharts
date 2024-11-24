@@ -1,7 +1,7 @@
 ﻿
 namespace NflDepthChartsService
 {
-    public class Sport
+    public class Sport: ISport
     {
         public string Name { get; set; }
         public List<ITeam> Teams { get; private set; }
