@@ -67,5 +67,40 @@ namespace NflDepthChartsServiceTest
             // Assert
             Assert.Null(result);
         }
+
+        [Fact]
+        public void GetTeam_WhenNameTeamNameAsNull_ShouldReturnNull() 
+        {
+            var sport = new Sport("Foorball");
+            var team = sport.GetTeam(null);
+
+            Assert.Null(team);
+        }
+
+        [Fact]
+        public void RemoveTeam_WhenGivenTeamName_ShouldRemoveTheCorrectTeam() 
+        {
+            var sport = new Sport("Football");
+            var team = new Team("team1", "Football", null);
+            sport.AddTeam(team);
+
+            var result = sport.RemoveTeam("team1");
+
+            Assert.True(result);
+            Assert.Empty(sport.Teams);
+        }
+
+        [Fact]
+        public void RemoveTeam_WhenGivenWrongTeamName_ShouldReturnFalse()
+        {
+            var sport = new Sport("Football");
+            var team = new Team("team1", "Football", null);
+            sport.AddTeam(team);
+
+            var result = sport.RemoveTeam("team2");
+
+            Assert.False(result);
+            Assert.NotEmpty(sport.Teams);
+        }
     }
 }

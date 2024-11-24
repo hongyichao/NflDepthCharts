@@ -26,5 +26,15 @@ namespace NflDepthChartsService
         {
             return Teams.FirstOrDefault(t => t.Name.ToLower() == name.ToLower());
         }
+
+        public bool RemoveTeam(string name) 
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                return false;
+
+            var teamToRemove = Teams.FirstOrDefault(t => t.Name.ToLower() == name.ToLower());
+
+            return Teams.Remove(teamToRemove);
+        }
     }
 }
