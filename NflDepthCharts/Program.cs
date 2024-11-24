@@ -60,9 +60,8 @@ class Program
         var depthChart = team.GetDepthChart();
 
         //delete player
-        Console.WriteLine("\nremove player from DepthChart “WR” MikeEvans");
-        var playerToDelete = await depthChart.GetPlayerAsync("LWR", "Mike Evans");
-        var deletedPlayer = await depthChart.RemovePlayerAsync("LWR", playerToDelete);
+        Console.WriteLine("\nremove player from DepthChart WR MikeEvans");        
+        var deletedPlayer = await team.RemovePlayerFromDepthChart("LWR", "Mike Evans");
         Console.WriteLine($"{deletedPlayer}");
 
         // Print full depth chart for Buccaneers

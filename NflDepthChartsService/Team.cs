@@ -19,6 +19,14 @@ namespace NflDepthChartsService
             await _depthChart.AddPlayerAsync(player, depth);
         }
 
+        public async Task<Player> RemovePlayerFromDepthChart(string position, string name)
+        {
+            var playerToDelete = await _depthChart.GetPlayerAsync(position, name);
+            var deletedPlayer = await _depthChart.RemovePlayerAsync(position, playerToDelete);
+            
+            return deletedPlayer;
+        }
+
         public async Task<Player> GetPlayerFromDepthChart(string position, string name) 
         {
             return await _depthChart.GetPlayerAsync(position, name);
