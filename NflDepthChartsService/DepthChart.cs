@@ -1,12 +1,10 @@
 ﻿
-using System.Xml.Linq;
-
 namespace NflDepthChartsService
 {
-    public class DepthChart: IDepthChart
+    public abstract class DepthChart: IDepthChart
     {
-        private readonly Dictionary<string, List<Player>> _chartGroups;
-        private readonly IDepthChartStrategy _strategy;
+        protected readonly Dictionary<string, List<Player>> _chartGroups;
+        protected readonly IDepthChartStrategy _strategy;
 
         public DepthChart(IDepthChartStrategy strategy)
         {
@@ -14,30 +12,9 @@ namespace NflDepthChartsService
             _strategy = strategy;
         }
 
-        public async Task AddPlayerAsync(Player player, int? positionDepth = null)
-        {
-            if(string.IsNullOrWhiteSpace(player.Name))
-                throw new InvalidOperationException("The player name cannot be empty");
-
-            var existingPlayer = await GetPlayerAsync(player.Position, player.Name);
-
-            if (existingPlayer != null)
-            {
-                throw new InvalidOperationException("The player is an existing player");
-            }
-            else 
-            {
-                if (!_chartGroups.ContainsKey(player.Position))
-                {
-                    _chartGroups[player.Position] = new List<Player>();
-                }
-
-                await _strategy.AddPlayerAsync(_chartGroups[player.Position], player, positionDepth);
-            }
-        }
-
-
-        public async Task<Player> GetPlayerAsync(string position, string name) 
+        public abstract Task AddPlayerAsync(Player player, int? positionDepth = null);
+        
+        public virtual async Task<Player> GetPlayerAsync(string position, string name) 
         {
             return await Task.Run(()=> 
             {
@@ -48,8 +25,7 @@ namespace NflDepthChartsService
             });
         }
 
-
-        public async Task<Player> RemovePlayerAsync(string position, Player player)
+        public virtual async Task<Player> RemovePlayerAsync(string position, Player player)
         {
             return await Task.Run(() =>
             {
@@ -64,14 +40,14 @@ namespace NflDepthChartsService
             });
         }
 
-        public async Task<List<Player>> GetBackupsAsync(string position, string playerName)
+        public virtual async Task<List<Player>> GetBackupsAsync(string position, string playerName)
         {
             var player = await GetPlayerAsync(position, playerName);
 
             return await GetBackupsAsync(player);
         }
 
-        public async Task<List<Player>> GetBackupsAsync(Player player)
+        public virtual async Task<List<Player>> GetBackupsAsync(Player player)
         {
             return await Task.Run(() =>
             {

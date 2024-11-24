@@ -15,7 +15,7 @@ class Program
 
         var footballDepthChartStrategy = new FootballDepthChartStrategy();
 
-        var footballDepthChart = new DepthChart(footballDepthChartStrategy);
+        var footballDepthChart = new FootballDepthChart(footballDepthChartStrategy);
 
         // Create 2 teams
         var teams = new List<ITeam>() 
@@ -54,16 +54,16 @@ class Program
         await GetBackUps(team, "QB", "Blaine Gabbert");
         await GetBackUps(team, "QB", "Kyle Trask");
 
-
         // Print full depth chart for Buccaneers
         await PrintFullDepthChart(team);
 
         var depthChart = team.GetDepthChart();
 
         //delete player
+        Console.WriteLine("\nremove player from DepthChart “WR” MikeEvans");
         var playerToDelete = await depthChart.GetPlayerAsync("LWR", "Mike Evans");
         var deletedPlayer = await depthChart.RemovePlayerAsync("LWR", playerToDelete);
-        Console.WriteLine($"\n{deletedPlayer}");
+        Console.WriteLine($"{deletedPlayer}");
 
         // Print full depth chart for Buccaneers
         await PrintFullDepthChart(team);

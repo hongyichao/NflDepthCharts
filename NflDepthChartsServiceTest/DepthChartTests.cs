@@ -10,7 +10,7 @@ namespace NflDepthChartsServiceTest
         {
             // Arrange
             var strategy = new FootballDepthChartStrategy();
-            var depthChart = new DepthChart(strategy);
+            var depthChart = new FootballDepthChart(strategy);
             var player = new Player(12, "Tom Brady", "QB");
 
             // Act
@@ -27,7 +27,7 @@ namespace NflDepthChartsServiceTest
         {
             // Arrange
             var strategy = new FootballDepthChartStrategy();
-            var depthChart = new DepthChart(strategy);
+            var depthChart = new FootballDepthChart(strategy);
             var player = new Player(52, " ", "QB");
 
             // Act
@@ -45,7 +45,7 @@ namespace NflDepthChartsServiceTest
         {
             // Arrange
             var strategy = new FootballDepthChartStrategy();
-            var depthChart = new DepthChart(strategy);
+            var depthChart = new FootballDepthChart(strategy);
             var player = new Player(12, "Tom Brady", "QB");
 
             // Act
@@ -65,7 +65,7 @@ namespace NflDepthChartsServiceTest
         {
             // Arrange
             var strategy = new FootballDepthChartStrategy();
-            var depthChart = new DepthChart(strategy);
+            var depthChart = new FootballDepthChart(strategy);
 
             var position = "QB";
 
@@ -91,7 +91,7 @@ namespace NflDepthChartsServiceTest
         {
             // Arrange
             var strategy = new FootballDepthChartStrategy();
-            var depthChart = new DepthChart(strategy);
+            var depthChart = new FootballDepthChart(strategy);
 
             var position = "QB";
 
@@ -120,7 +120,7 @@ namespace NflDepthChartsServiceTest
         {
             // Arrange
             var strategy = new FootballDepthChartStrategy();
-            var depthChart = new DepthChart(strategy);
+            var depthChart = new FootballDepthChart(strategy);
             var starter = new Player(12, "Tom Brady", "QB");
             var backup = new Player(11, "Blaine Gabbert", "QB");
             await depthChart.AddPlayerAsync(starter);
@@ -139,7 +139,7 @@ namespace NflDepthChartsServiceTest
         {
             // Arrange
             var strategy = new FootballDepthChartStrategy();
-            var depthChart = new DepthChart(strategy);
+            var depthChart = new FootballDepthChart(strategy);
 
             // Act
             var backups = await depthChart.GetBackupsAsync("QB", "Non Existent Player");
@@ -153,7 +153,7 @@ namespace NflDepthChartsServiceTest
         {
             // Arrange
             var strategy = new FootballDepthChartStrategy();
-            var depthChart = new DepthChart(strategy);
+            var depthChart = new FootballDepthChart(strategy);
             var player = new Player(12, "Tom Brady", "QB");
             await depthChart.AddPlayerAsync(player);
 
@@ -172,7 +172,7 @@ namespace NflDepthChartsServiceTest
         {
             // Arrange
             var strategy = new FootballDepthChartStrategy();
-            var depthChart = new DepthChart(strategy);
+            var depthChart = new FootballDepthChart(strategy);
             var player = new Player(12, "Non Existent", "QB");
 
             // Act
